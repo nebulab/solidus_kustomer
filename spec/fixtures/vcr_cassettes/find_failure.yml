@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.kustomerapp.com/v1/customers/externalId=9999
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer my_api_key
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '101'
+      Connection:
+      - keep-alive
+      Date:
+      - Thu, 01 Oct 2020 15:10:09 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      X-Kustomer-Pod:
+      - prod1
+      Timing-Allow-Origin:
+      - "*"
+      X-Ratelimit-Limit:
+      - '1000'
+      X-Ratelimit-Remaining:
+      - '999'
+      Cache-Control:
+      - no-cache,private
+      Etag:
+      - W/"65-s+40w1cIGBGcdpolCOY90Z+5vq0"
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - Error from cloudfront
+      Via:
+      - 1.1 c80e676948368625bab1e3de26dbd163.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - MXP64-C3
+      X-Amz-Cf-Id:
+      - zNXDle3WbdWmuL-LDL7UonFY9cLzH2ENt9Za1Xv10jyPnpKSExQTxA==
+    body:
+      encoding: UTF-8
+      string: '{"errors":[{"status":404,"source":{"parameter":"externalId"},"code":"notfound","title":"Not
+        Found"}]}'
+  recorded_at: Thu, 01 Oct 2020 15:10:09 GMT
+recorded_with: VCR 6.0.0
