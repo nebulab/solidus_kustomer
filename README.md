@@ -1,20 +1,18 @@
-# Solidus Kustomer
+# solidus_kustomer
 
-<!-- Replace REPO_ORG and uncomment the following to show badges for CI and coverage. -->
+[![CircleCI](https://circleci.com/gh/nebulab/solidus_kustomer.svg?style=shield)](https://circleci.com/gh/nebulab/solidus_kustomer)
+[![codecov](https://codecov.io/gh/nebulab/solidus_kustomer/branch/master/graph/badge.svg)](https://codecov.io/gh/nebulab/solidus_kustomer)
 
-<!--
-[![CircleCI](https://circleci.com/gh/REPO_ORG/solidus_kustomer.svg?style=shield)](https://circleci.com/gh/REPO_ORG/solidus_kustomer)
-[![codecov](https://codecov.io/gh/REPO_ORG/solidus_kustomer/branch/master/graph/badge.svg)](https://codecov.io/gh/REPO_ORG/solidus_kustomer)
--->
-
-[Explain what your extension does.]
+This extension allows you to integrate your [Solidus](https://solidus.io) store with the customer
+support application [Kustomer](https://kustomer.com) via [solidus_tracking](https://github.com/solidusio-contrib/solidus_tracking).
 
 ## Installation
 
 Add solidus_kustomer to your Gemfile:
 
 ```ruby
-gem 'solidus_kustomer'
+gem 'solidus_tracking', github: 'solidusio-contrib/solidus_tracking'
+gem 'solidus_kustomer', github: 'nebulab/solidus_kustomer'
 ```
 
 Bundle your dependencies and run the installation generator:
@@ -25,7 +23,39 @@ bin/rails generate solidus_kustomer:install
 
 ## Usage
 
-[Explain how to use your extension once it's been installed.]
+Once installed the extension will provide access to a `SolidusKustomer::Client` with the ability to
+interact with Kustomer `KObjects`.
+
+This client is used interally via [solidus_tracking](https://github.com/solidusio-contrib/solidus_tracking)
+to track relevant Solidus events to make them appear on customers' timelines.
+
+### Preparation
+
+This extension assumes that your Kustomer organization have already present the following Klasses:
+
+- `order`
+
+### Events tracked
+
+The events tracked by default are:
+
+- `order_finalized`
+
+### Creating customers on Kustomer
+
+If you want to automatically create a customer on the Kustomer app upon account creation, you can
+set the `identify_customer_on_creation` configuration flag to `true`:
+
+```ruby
+# config/initializers/solidus_kustomer.rb
+
+SolidusKustomer.configure do |config|
+  # ...
+  config.identify_customer_on_creation = true
+end
+```
+
+Newly created users will be automatically identified (registered as customers) on Kustomer.
 
 ## Development
 
@@ -43,13 +73,6 @@ To run [Rubocop](https://github.com/bbatsov/rubocop) static code analysis run
 
 ```shell
 bundle exec rubocop
-```
-
-When testing your application's integration with this extension you may use its factories.
-Simply add this require statement to your spec_helper:
-
-```ruby
-require 'solidus_kustomer/factories'
 ```
 
 ### Running the sandbox
@@ -93,4 +116,4 @@ bundle exec gem release
 
 ## License
 
-Copyright (c) 2020 [name of extension author], released under the New BSD License.
+Copyright (c) 2020 Nebulab SRLs, released under the New BSD License.
