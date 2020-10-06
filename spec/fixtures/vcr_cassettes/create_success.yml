@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.kustomerapp.com/v1/customers/the_customer_UUID/klasses/order
+    body:
+      encoding: UTF-8
+      string: '{"title":"Order","custom":{"orderIdNum":1,"orderCreatedAt":"2020-10-01T12:06:19.825Z","orderNumberStr":"R11111111"}}'
+    headers:
+      Authorization:
+      - Bearer my_api_key
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '753'
+      Connection:
+      - keep-alive
+      Date:
+      - Thu, 01 Oct 2020 12:06:20 GMT
+      Vary:
+      - X-HTTP-Method-Override, Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      X-Kustomer-Pod:
+      - prod1
+      Timing-Allow-Origin:
+      - "*"
+      X-Ratelimit-Limit:
+      - '1000'
+      X-Ratelimit-Remaining:
+      - '999'
+      Cache-Control:
+      - no-cache,private
+      Etag:
+      - W/"2f1-Gv28M9fZUJj/84h39VT6GQqfI0E"
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 2fb101a75d62357647d00a936fb26d03.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - MXP64-C3
+      X-Amz-Cf-Id:
+      - Wly-4QAZHuwHqQbGdjzbjCVXJWRs9oLq9WNTSzluHYrrzRZRVFNfxQ==
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"kobject.order","id":"5f75c63cd5c0384ad82a17ae","attributes":{"title":"Order","icon":"shopping","images":[],"custom":{"orderIdNum":1,"orderCreatedAt":"2020-10-01T12:06:19.825Z","orderNumberStr":"R11111111"},"tags":[],"updatedAt":"2020-10-01T12:06:20.291Z","createdAt":"2020-10-01T12:06:20.291Z","rev":1,"roleGroupVersions":[]},"relationships":{"org":{"links":{"self":"/v1/orgs/5f651b02c887b30019382410"},"data":{"type":"org","id":"5f651b02c887b30019382410"}},"klass":{"link":{"self":"/v1/klasses/order"},"data":{"type":"klass","id":"order"}},"customer":{"links":{"self":"/v1/customers/the_customer_UUID"},"data":{"type":"customer","id":"the_customer_UUID"}}},"links":{"self":"/v1/klasses/orders/5f75c63cd5c0384ad82a17ae"}}}'
+  recorded_at: Thu, 01 Oct 2020 12:06:20 GMT
+recorded_with: VCR 6.0.0
