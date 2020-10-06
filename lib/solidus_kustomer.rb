@@ -22,5 +22,27 @@ module SolidusKustomer
     def configure
       yield configuration
     end
+
+    def create_customer_now(user)
+      kustomer_client.create_customer(user)
+    end
+
+    def create_customer_later(user)
+      SolidusKustomer::CreateCustomerJob.perform_later(user)
+    end
+
+    def update_customer_now(user)
+      kustomer_client.update_customer(user)
+    end
+
+    def update_customer_later(user)
+      SolidusKustomer::UpdateCustomerJob.perform_later(user)
+    end
+
+    private
+
+    def kustomer_client
+      @kustomer_client ||= SolidusKustomer::Client.new(api_key: configutation.api_key)
+    end
   end
 end
