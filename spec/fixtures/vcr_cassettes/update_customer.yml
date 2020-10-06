@@ -1,0 +1,68 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://api.kustomerapp.com/v1/customers/the_customer_UUID
+    body:
+      encoding: UTF-8
+      string: '{"username":"the_new_email@example.com","emails":[{"type":"home","email":"the_new_email@example.com"}],"externalId":"50"}'
+    headers:
+      Authorization:
+      - Bearer my_api_key
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 06 Oct 2020 14:26:53 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      X-Kustomer-Pod:
+      - prod1
+      Timing-Allow-Origin:
+      - "*"
+      X-Ratelimit-Limit:
+      - '1000'
+      X-Ratelimit-Remaining:
+      - '999'
+      Cache-Control:
+      - no-cache,private
+      X-Ratelimit-Object-Limit:
+      - '600'
+      X-Ratelimit-Object-Remaining:
+      - '598'
+      Etag:
+      - W/"724-SWcwKKet6Ncooa0+ulISXbd9MmQ"
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 7c9f9f67de5f1e5b8c819ce6a8b7f8f4.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - MXP64-C3
+      X-Amz-Cf-Id:
+      - F7h9KwHDAZPj1UxrsTG_Nsp5jdXvxUfxs7GTkcNZaq_Q96uqjgXFIg==
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"type":"customer","id":"the_customer_UUID","attributes":{"name":"New
+        name","displayName":"New name","displayColor":"pink","displayIcon":"anchor","externalId":"50","externalIds":[{"verified":true,"externalId":"50"}],"sharedExternalIds":[],"username":"the_new_email@example.com","emails":[{"type":"home","verified":false,"email":"the_new_email@example.com"}],"sharedEmails":[],"phones":[],"sharedPhones":[],"smoochIds":[],"whatsapps":[],"facebookIds":[],"instagramIds":[],"socials":[],"sharedSocials":[],"urls":[],"locations":[],"activeUsers":[],"watchers":[],"recentLocation":{"updatedAt":"2020-10-05T16:04:13.305Z"},"createdAt":"2020-10-05T16:04:13.304Z","updatedAt":"2020-10-06T14:26:53.054Z","modifiedAt":"2020-10-06T14:26:53.054Z","lastActivityAt":"2020-10-06T14:26:53.054Z","deleted":false,"lastMessageIn":{"sentiment":{}},"lastMessageOut":{},"lastMessageUnrespondedTo":{},"lastConversation":{"sentiment":{},"channels":[],"tags":[]},"conversationCounts":{"done":0,"open":0,"snoozed":0,"all":0},"preview":{"$init":true},"tags":[],"sentiment":{},"progressiveStatus":null,"verified":true,"rev":3,"recentItems":[],"satisfactionLevel":{"firstSatisfaction":{"sentByTeams":[]},"lastSatisfaction":{"sentByTeams":[]}},"roleGroupVersions":[],"accessOverride":[],"firstName":"New","lastName":"name"},"relationships":{"messages":{"links":{"self":"/v1/customers/the_customer_UUID/messages"}},"createdBy":{"links":{"self":"/v1/users/5f7580902bf93344d8e55eda"},"data":{"type":"user","id":"5f7580902bf93344d8e55eda"}},"modifiedBy":{"links":{"self":"/v1/users/5f7580902bf93344d8e55eda"},"data":{"type":"user","id":"5f7580902bf93344d8e55eda"}},"org":{"data":{"type":"org","id":"5f651b02c887b30019382410"},"links":{"self":"/v1/orgs/5f651b02c887b30019382410"}}},"links":{"self":"/v1/customers/the_customer_UUID"}}}'
+  recorded_at: Tue, 06 Oct 2020 14:26:53 GMT
+recorded_with: VCR 6.0.0

@@ -13,6 +13,44 @@ module SolidusKustomer
       @url = url
     end
 
+    # Creates a new customer on Kustomer
+    #
+    # @param user [Spree::User] the user to create on Kustomer
+    #
+    # @return [Hash] containing the newly created data on Kustomer
+    def create_customer(user)
+      response = HTTParty.post(
+        "#{@url}customers",
+        body: SolidusKustomer::Serializer::User.serialize(user).to_json,
+        headers: headers
+      )
+
+      raise(SolidusKustomer::CustomerCreateError) unless response.success?
+
+      user.update!(kustomer_id: response.parsed_response['data']['id'])
+      response.parsed_response['data']
+    end
+
+    # Updates a customer on Kustomer
+    #
+    # @param user [Spree::User] the user to update on Kustomer
+    #
+    # @return [Hash] containing the updated Kustomer data or nil
+    # if it attempts to update a customer without a kustomer_id
+    def update_customer(user)
+      return unless user.kustomer_id
+
+      response = HTTParty.put(
+        "#{@url}customers/#{user.kustomer_id}",
+        body: SolidusKustomer::Serializer::User.serialize(user).to_json,
+        headers: headers
+      )
+
+      raise(SolidusKustomer::CustomerUpdateError) unless response.success?
+
+      response.parsed_response['data']
+    end
+
     # Create a new instance of a Kustomer Klass for a customer
     #
     # @param kobject_klass [String] the Klass name of the KObject to create

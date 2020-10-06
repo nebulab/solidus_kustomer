@@ -14,6 +14,32 @@ RSpec.describe SolidusKustomer::Client do
     end
   end
 
+  describe '#create_customer' do
+    it 'creates the customer' do
+      user = create(:user_with_addresses, id: 500)
+      kustomer = described_class.new(api_key: 'my_api_key')
+
+      VCR.use_cassette('create_customer') do
+        response = kustomer.create_customer(user)
+        expect(response['attributes']['externalId']).to eq(user.id.to_s)
+      end
+    end
+  end
+
+  describe '#update_customer' do
+    it 'updates the existing customer information on Kustomer' do
+      user = create(:user, kustomer_id: 'the_customer_UUID')
+      kustomer = described_class.new(api_key: 'my_api_key')
+
+      user.update(email: 'the_new_email@example.com')
+
+      VCR.use_cassette('update_customer') do
+        new_customer_data = kustomer.update_customer(user)
+        expect(new_customer_data['attributes']['emails'][0]['email']).to eq('the_new_email@example.com')
+      end
+    end
+  end
+
   describe '#create' do
     context 'with well-formed custom attributes' do
       it 'creates the KObject for the customer' do
