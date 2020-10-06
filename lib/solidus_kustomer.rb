@@ -10,6 +10,8 @@ require 'solidus_kustomer/engine'
 require 'solidus_kustomer/configuration'
 require 'solidus_kustomer/errors'
 require 'solidus_kustomer/client'
+require 'solidus_kustomer/serializer/base'
+require 'solidus_kustomer/serializer/user'
 
 module SolidusKustomer
   class << self
