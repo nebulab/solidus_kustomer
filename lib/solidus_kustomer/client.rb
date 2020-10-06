@@ -20,7 +20,7 @@ module SolidusKustomer
     #
     # @return [Boolean] whether the creation succeded or not
     def create(kobject_klass, attributes:, customer:)
-      customer_id = find_customer_by_external_id(customer)['id']
+      customer_id = find_customer_id(customer)
 
       response = HTTParty.post(
         "#{@url}customers/#{customer_id}/klasses/#{kobject_klass}",
@@ -34,14 +34,70 @@ module SolidusKustomer
       response.success? || raise(SolidusKustomer::CreateError)
     end
 
-    # Finds the customer via the Solidus database id
+    # Finds a customer via their Spree::User record. If the user does not have a kustomer_id
+    # associated, it also updates the original record to cache the UUID.
     #
-    # @param user [Spree::User] the user whose data we're looking for
+    # @param user [Spree::User] the customer we're looking for
     #
-    # @return [Hash] the customer data
-    def find_customer_by_external_id(user)
+    # @return [Hash] the customer data or nil if not present
+    def find_customer(user)
+      return find_customer_by_uuid(user.kustomer_id) if user.kustomer_id
+
+      customer = find_customer_by_email(user.email) || find_customer_by_external_id(user.id)
+      user.update!(kustomer_id: customer['id']) if customer
+      customer
+    end
+
+    # Finds a customer UUID via their Spree::User record. If the user does not have a kustomer_id
+    # associated, it also updates the original record to cache the UUID.
+    #
+    # @param user [Spree::User] the customer's UUID we're looking for
+    #
+    # @return [String] the customer UUID or nil if not present
+    def find_customer_id(user)
+      return user.kustomer_id if user.kustomer_id
+
+      customer = find_customer(user)
+      user.update!(kustomer_id: customer['id']) if customer
+      customer['id']
+    end
+
+    # Finds a customer via their Kustomer UUID
+    #
+    # @param uuid [String] the customer UUID
+    #
+    # @return [Hash] the customer data or nil if not present
+    def find_customer_by_uuid(uuid)
       response = HTTParty.get(
-        "#{@url}customers/externalId=#{user.id}",
+        "#{@url}customers/#{uuid}",
+        headers: headers
+      )
+
+      return response.parsed_response['data'] if response.success?
+    end
+
+    # Finds a customer via their Spree::User id
+    #
+    # @param external_id [Integer] the customer UUID
+    #
+    # @return [Hash] the customer data or nil if not present
+    def find_customer_by_external_id(external_id)
+      response = HTTParty.get(
+        "#{@url}customers/externalId=#{external_id}",
+        headers: headers
+      )
+
+      response.parsed_response['data'] if response.success?
+    end
+
+    # Finds a customer via their Spree::User email
+    #
+    # @param email [String] the customer UUID
+    #
+    # @return [Hash] the customer data or nil if not present
+    def find_customer_by_email(email)
+      response = HTTParty.get(
+        "#{@url}customers/email=#{email}",
         headers: headers
       )
 

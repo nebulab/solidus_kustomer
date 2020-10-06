@@ -18,13 +18,13 @@ RSpec.describe SolidusKustomer::Client do
     context 'with well-formed custom attributes' do
       it 'creates the KObject for the customer' do
         kustomer = described_class.new(api_key: 'my_api_key')
-        user = build_stubbed(:user)
+        user = build_stubbed(:user, kustomer_id: 'the_customer_UUID')
         attributes = {
           'orderIdNum' => 1,
           'orderCreatedAt' => Time.zone.now,
           'orderNumberStr' => 'R11111111'
         }
-        allow(kustomer).to receive(:find_customer_by_external_id)
+        allow(kustomer).to receive(:find_customer)
           .with(user)
           .and_return(
             {
@@ -50,11 +50,11 @@ RSpec.describe SolidusKustomer::Client do
     context 'with malformed custom attributes' do
       it 'raises a CreateError' do
         kustomer = described_class.new(api_key: 'my_api_key')
-        user = build_stubbed(:user)
+        user = create(:user)
         attributes = {
           'notAnActualAttribute' => 'foobar'
         }
-        allow(kustomer).to receive(:find_customer_by_external_id)
+        allow(kustomer).to receive(:find_customer)
           .with(user)
           .and_return(
             {
@@ -76,6 +76,44 @@ RSpec.describe SolidusKustomer::Client do
     end
   end
 
+  describe '#find_customer' do
+    context 'when the Spree::User has a kustomer_id' do
+      it 'retrieves the customer via their UUID' do
+        kustomer = described_class.new(api_key: 'my_api_key')
+        user = create(:user, kustomer_id: 'the_customer_UUID')
+        allow(kustomer).to receive(:find_customer_by_uuid)
+
+        kustomer.find_customer(user)
+
+        expect(kustomer).to have_received(:find_customer_by_uuid).with(user.kustomer_id)
+      end
+    end
+
+    context 'when the Spree::User does not have a kustomer_id' do
+      it 'retrieves the customer via their email' do
+        kustomer = described_class.new(api_key: 'my_api_key')
+        user = create(:user)
+        allow(kustomer).to receive(:find_customer_by_email)
+        allow(kustomer).to receive(:find_customer_by_external_id).and_return(nil)
+
+        kustomer.find_customer(user)
+
+        expect(kustomer).to have_received(:find_customer_by_email).with(user.email)
+      end
+
+      it 'retrieves the customer via their external_id when they cannot be found via email' do
+        kustomer = described_class.new(api_key: 'my_api_key')
+        user = create(:user)
+        allow(kustomer).to receive(:find_customer_by_email).and_return(nil)
+        allow(kustomer).to receive(:find_customer_by_external_id)
+
+        kustomer.find_customer(user)
+
+        expect(kustomer).to have_received(:find_customer_by_external_id).with(user.id)
+      end
+    end
+  end
+
   describe '#find_customer_by_external_id' do
     context 'when querying for an existing customer' do
       it 'returns the customer KObject as an hash' do
@@ -83,7 +121,7 @@ RSpec.describe SolidusKustomer::Client do
         user = build_stubbed(:user, id: 6)
 
         VCR.use_cassette('find_success') do
-          customer = kustomer.find_customer_by_external_id(user)
+          customer = kustomer.find_customer_by_external_id(user.id)
           expect(customer).to include(
             'id' => 'the_customer_UUID',
             'type' => 'customer'
@@ -98,7 +136,36 @@ RSpec.describe SolidusKustomer::Client do
         user = build_stubbed(:user, id: 9999)
 
         VCR.use_cassette('find_failure') do
-          customer = kustomer.find_customer_by_external_id(user)
+          customer = kustomer.find_customer_by_external_id(user.id)
+          expect(customer).to eq(nil)
+        end
+      end
+    end
+  end
+
+  describe '#find_customer_by_email' do
+    context 'when querying for an existing customer' do
+      it 'returns the customer KObject as an hash' do
+        kustomer = described_class.new(api_key: 'my_api_key')
+        user = build_stubbed(:user, email: 'jdoe@example.com')
+
+        VCR.use_cassette('find_by_email_success') do
+          customer = kustomer.find_customer_by_email(user.email)
+          expect(customer).to include(
+            'id' => 'the_customer_UUID',
+            'type' => 'customer'
+          )
+        end
+      end
+    end
+
+    context 'when querying for a non existent customer' do
+      it 'returns nil' do
+        kustomer = described_class.new(api_key: 'my_api_key')
+        user = build_stubbed(:user, email: 'not_a_customer@example.com')
+
+        VCR.use_cassette('find_by_email_failure') do
+          customer = kustomer.find_customer_by_email(user.email)
           expect(customer).to eq(nil)
         end
       end
