@@ -3,7 +3,6 @@
 require 'httparty'
 require 'solidus_core'
 require 'solidus_support'
-require 'solidus_tracking'
 
 require 'solidus_kustomer/version'
 require 'solidus_kustomer/engine'
