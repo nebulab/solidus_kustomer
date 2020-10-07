@@ -27,7 +27,9 @@ module SolidusKustomer
 
       raise(SolidusKustomer::CustomerCreateError) unless response.success?
 
-      user.update!(kustomer_id: response.parsed_response['data']['id'])
+      # rubocop:disable Rails/SkipsModelValidations
+      user.update_column(:kustomer_id, response.parsed_response['data']['id'])
+      # rubocop:enable Rails/SkipsModelValidations
       response.parsed_response['data']
     end
 
@@ -82,7 +84,9 @@ module SolidusKustomer
       return find_customer_by_uuid(user.kustomer_id) if user.kustomer_id
 
       customer = find_customer_by_email(user.email) || find_customer_by_external_id(user.id)
-      user.update!(kustomer_id: customer['id']) if customer
+      # rubocop:disable Rails/SkipsModelValidations
+      user.update_column(:kustomer_id, customer['id']) if customer
+      # rubocop:enable Rails/SkipsModelValidations
       customer
     end
 
@@ -96,7 +100,9 @@ module SolidusKustomer
       return user.kustomer_id if user.kustomer_id
 
       customer = find_customer(user)
-      user.update!(kustomer_id: customer['id']) if customer
+      # rubocop:disable Rails/SkipsModelValidations
+      user.update_column(:kustomer_id, customer['id']) if customer
+      # rubocop:enable Rails/SkipsModelValidations
       customer['id']
     end
 
