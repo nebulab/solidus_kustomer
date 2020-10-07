@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.kustomerapp.com/v1/customers/email=not_a_customer@example.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer my_api_key
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '96'
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 06 Oct 2020 09:25:05 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      X-Kustomer-Pod:
+      - prod1
+      Timing-Allow-Origin:
+      - "*"
+      X-Ratelimit-Limit:
+      - '1000'
+      X-Ratelimit-Remaining:
+      - '996'
+      Cache-Control:
+      - no-cache,private
+      Etag:
+      - W/"60-HutFhcS5uC46icz1LOnmbuNGwCQ"
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - Error from cloudfront
+      Via:
+      - 1.1 c80e676948368625bab1e3de26dbd163.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - MXP64-C3
+      X-Amz-Cf-Id:
+      - R_IGXjRfc4qIGQ-0AtGX8Gin-sFYm-NyyUmMBmNZcYxL5aA9Rda09w==
+    body:
+      encoding: UTF-8
+      string: '{"errors":[{"status":404,"source":{"parameter":"email"},"code":"notfound","title":"Not
+        Found"}]}'
+  recorded_at: Tue, 06 Oct 2020 09:25:05 GMT
+recorded_with: VCR 6.0.0

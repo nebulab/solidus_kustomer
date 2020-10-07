@@ -41,21 +41,21 @@ The events tracked by default are:
 
 - `order_finalized`
 
-### Creating customers on Kustomer
+### Customer lifecycle
 
-If you want to automatically create a customer on the Kustomer app upon account creation, you can
-set the `identify_customer_on_creation` configuration flag to `true`:
+The extension default configurations is set to create and update customers every time a user is
+created or updated. If you want to disable this behaviour, delete or set the following configuration
+options to false:
 
 ```ruby
 # config/initializers/solidus_kustomer.rb
 
 SolidusKustomer.configure do |config|
   # ...
-  config.identify_customer_on_creation = true
+  config.create_customer_on_user_creation = true
+  config.update_customer_on_user_update = true
 end
 ```
-
-Newly created users will be automatically identified (registered as customers) on Kustomer.
 
 ## Development
 
